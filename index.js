@@ -61,18 +61,16 @@ function readFile(file) {
     const groupByTitles = groupBy('title');
     const grouped = groupByTitles(parsed);
 
-    console.log(grouped);
-
     booksTitles = Object.keys(grouped);
 
     document.getElementById('separator').innerHTML = '. . .';
-    document.getElementById('status').innerHTML = '✨ Success! I found some notes:';
+    document.getElementById('status').innerHTML = '✨ Success! Found some notes:';
 
     let bookIndex = 0;
     for (const title in grouped) {
       amountOfNotes = grouped[title].length;
 
-      renderBook(title, amountOfNotes, bookIndex);
+      renderBook(grouped, title, amountOfNotes, bookIndex);
 
       (bookIndex > bookEmojis.length) ? bookIndex = 0 : bookIndex++;
     }
@@ -85,7 +83,7 @@ function readFile(file) {
   reader.readAsText(file);
 }
 
-function renderBook (title, amountOfNotes, bookIndex) {
+function renderBook (books, title, amountOfNotes, bookIndex) {
   // create a new div element
   var newDiv = document.createElement("a");
   newDiv.id = `book-${bookIndex}`
@@ -95,12 +93,23 @@ function renderBook (title, amountOfNotes, bookIndex) {
   // add the text node to the newly created div
   paragraph.appendChild(newContent);
   newDiv.appendChild(paragraph);
-  newDiv.classList.add("book")
+  newDiv.classList.add("book");
   // add the newly created element and its content into the DOM
   var booksList = document.getElementById("books-list");
   var firstChild = booksList.firstChild;
-  download(newDiv, 'hello.md', `# Hello \nThis was a title\n## And this is a heading`);
+
+  var contents = generateMarkdown(title, books);
+  download(newDiv, `${bookIndex}.md`, contents);
   booksList.insertBefore(newDiv, firstChild);
+}
+
+function generateMarkdown(title, books) {
+  currentBook = books[title];
+  var str = ''
+  for (note of currentBook) {
+    str += `> ${note['text']}\n\n${note['timestamp']}\n\n`;
+  }
+  return str;
 }
 
 const groupBy = key => array =>
