@@ -1,6 +1,7 @@
 body {
   font-family: 'Poppins', sans-serif;
   font-weight: 500;
+  text-align: center;
 }
 
 h1,h2,h3,h4,h5,h6 {
@@ -22,4 +23,47 @@ p {
   max-width: 30rem;
   margin-left: auto;
   margin-right: auto;
+}
+
+.logo {
+  text-decoration: none;
+}
+
+.logo-text {
+  font-size: 32px;
+  color: black;
+  /* background: -webkit-linear-gradient(0deg, green, orange); */
+  /* -webkit-background-clip: text; */
+  /* -webkit-text-fill-color: transparent; */
+  max-width: 10em;
+}
+
+.greeting {
+  text-align: center;
+}
+
+#separator {
+color: #D8D8D8FF;
+}
+
+#status {
+  font-size: 24px;
+  margin-bottom: 1rem;
+}
+
+#books-list {
+  display: inline-block;
+  text-align: left;
+}
+
+.color-ink {
+  color: #3393FF;
+}
+
+.color-greyish {
+  color: #7E7E7E;
+}
+
+.text-center {
+  text-align: center;
 }

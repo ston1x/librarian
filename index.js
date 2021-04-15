@@ -1,4 +1,5 @@
 const dropArea = document.getElementById('drop-area');
+const bookEmojis = ['📕', '📔', '📘', '📗', '📙', '📒', '📓'];
 
 dropArea.addEventListener('dragover', (event) => {
   event.stopPropagation();
@@ -43,16 +44,54 @@ function readFile(file) {
 
       if (cleanedUpAttributes.length < 3) return null;
 
-      var title = cleanedUpAttributes[0].replace(/[\n\r]+/g, '');
+      var title = cleanedUpAttributes[0].replace(/[\n\r]+/g, '').replace(/^\uFEFF/gm, '').replace(/^\u00BB\u00BF/gm,'');
       var text = cleanedUpAttributes[2].replace(/[\n\r]+/g, '');
       var timestamp = cleanedUpAttributes[1].replace(/[\n\r]+/g, '').split(timestampRegex).filter(Boolean)[1];
 
-      return [title, text, timestamp];
+      return {title: title, text: text, timestamp: timestamp};
     }).filter(value => value);
-    console.log(parsed);
 
-    // TODO: Group by books
+    const groupByTitles = groupBy('title');
+    const grouped = groupByTitles(parsed);
+
+    console.log(grouped);
+
+    booksTitles = Object.keys(grouped);
+
+    document.getElementById('separator').innerHTML = '. . .';
+    document.getElementById('status').innerHTML = '✨ Success! I found some notes:';
+
+    let bookIndex = 0;
+    for (const title in grouped) {
+      amountOfNotes = grouped[title].length;
+      renderBook(title, amountOfNotes, bookIndex);
+      (bookIndex > bookEmojis.length) ? bookIndex = 0 : bookIndex++;
+    }
+
+    // TODO: Handle errors
+    // TODO: Generate CSV and/or Markdown
   };
 
   reader.readAsText(file);
 }
+
+function renderBook (title, amountOfNotes, bookIndex) {
+  // create a new div element
+  var newDiv = document.createElement("div");
+  // and give it some content
+  var newContent = document.createTextNode(`${bookEmojis[bookIndex]} ${title}: ${amountOfNotes}`);
+  // add the text node to the newly created div
+  newDiv.appendChild(newContent);
+
+  // add the newly created element and its content into the DOM
+  var booksList = document.getElementById("books-list");
+  var firstChild = booksList.firstChild;
+  booksList.insertBefore(newDiv, firstChild);
+}
+
+const groupBy = key => array =>
+  array.reduce((objectsByKeyValue, obj) => {
+    const value = obj[key];
+    objectsByKeyValue[value] = (objectsByKeyValue[value] || []).concat(obj);
+    return objectsByKeyValue;
+  }, {});

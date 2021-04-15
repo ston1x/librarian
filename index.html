@@ -17,9 +17,19 @@
   </head>
 
   <body>
-    <h1>✂️ Clippings</h1>
-    <p>👋🏼 Hi there!</p>
-    <p>You can upload your clippings.txt file from your Kindle and we will sort it out!</p>
+    <h1 class="logo">
+      <a href="./index.html" class="logo">
+        📚
+        <span class="logo-text">
+          Librarian
+        </span>
+      </a>
+    </h1>
+    <div class="greeting">
+
+      <h2>👋🏼 Hi there!</h2>
+      <p>You can upload your clippings.txt file from your Kindle and we will sort it out!</p>
+    </div>
 
   <div id="drop-area">
     <p>Drop your file here (.txt only)</p>
@@ -27,6 +37,13 @@
     <p>
       <input type="file" id="file-selector" accept=".txt">
     </p>
+  </div>
+
+  <h1 id="separator">
+  </h1>
+  <div id="status"></div>
+  <div id="books-list">
+    <div id="test-book"></div>
   </div>
 
   <script src="index.js"></script>
