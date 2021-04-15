@@ -78,6 +78,7 @@ function readFile(file) {
 function renderBook (title, amountOfNotes, bookIndex) {
   // create a new div element
   var newDiv = document.createElement("div");
+  newDiv.id = `book-${bookIndex}`
   // and give it some content
   var newContent = document.createTextNode(`${bookEmojis[bookIndex]} ${title}: ${amountOfNotes}`);
   // add the text node to the newly created div
