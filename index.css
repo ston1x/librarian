@@ -1,11 +1,15 @@
 body {
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-weight: 500;
   text-align: center;
 }
 
-h1,h2,h3,h4,h5,h6 {
+h2,h3,h4,h5,h6 {
   font-weight: 700;
+}
+
+h1 {
+  font-weight: 800;
 }
 
 p {
@@ -30,7 +34,7 @@ p {
 }
 
 .logo-text {
-  font-size: 32px;
+  font-size: 36px;
   color: black;
   /* background: -webkit-linear-gradient(0deg, green, orange); */
   /* -webkit-background-clip: text; */
