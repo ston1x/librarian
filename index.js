@@ -1,6 +1,13 @@
 const dropArea = document.getElementById('drop-area');
 const bookEmojis = ['📕', '📔', '📘', '📗', '📙', '📒', '📓'];
 
+function download(element, filename, contents) {
+  element.setAttribute('href', 'data:text/markdown;charset=utf-8,' + encodeURIComponent(contents));
+  element.setAttribute('download', filename);
+  element.classList.add("book-url")
+
+}
+
 dropArea.addEventListener('dragover', (event) => {
   event.stopPropagation();
   event.preventDefault();
@@ -64,11 +71,14 @@ function readFile(file) {
     let bookIndex = 0;
     for (const title in grouped) {
       amountOfNotes = grouped[title].length;
+
       renderBook(title, amountOfNotes, bookIndex);
+
       (bookIndex > bookEmojis.length) ? bookIndex = 0 : bookIndex++;
     }
 
     // TODO: Handle errors
+    // TODO: Handle other languages? Check how Kindle behaves when other system languages are used
     // TODO: Generate CSV and/or Markdown
   };
 
@@ -77,16 +87,19 @@ function readFile(file) {
 
 function renderBook (title, amountOfNotes, bookIndex) {
   // create a new div element
-  var newDiv = document.createElement("div");
+  var newDiv = document.createElement("a");
   newDiv.id = `book-${bookIndex}`
   // and give it some content
+  var paragraph = document.createElement("p");
   var newContent = document.createTextNode(`${bookEmojis[bookIndex]} ${title}: ${amountOfNotes}`);
   // add the text node to the newly created div
-  newDiv.appendChild(newContent);
-
+  paragraph.appendChild(newContent);
+  newDiv.appendChild(paragraph);
+  newDiv.classList.add("book")
   // add the newly created element and its content into the DOM
   var booksList = document.getElementById("books-list");
   var firstChild = booksList.firstChild;
+  download(newDiv, 'hello.md', `# Hello \nThis was a title\n## And this is a heading`);
   booksList.insertBefore(newDiv, firstChild);
 }
 

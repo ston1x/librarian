@@ -56,6 +56,16 @@ color: #D8D8D8FF;
   text-align: left;
 }
 
+.book {
+  /* transition: opacity 4000ms; */
+  /* will-change: opacity; */
+}
+
+.book-url {
+  color: green;
+  text-decoration: none;
+}
+
 .color-ink {
   color: #3393FF;
 }
