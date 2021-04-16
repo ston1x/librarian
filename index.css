@@ -9,7 +9,7 @@ h2,h3,h4,h5,h6 {
 }
 
 h1 {
-  font-weight: 800;
+  font-weight: 900;
 }
 
 p {
@@ -30,11 +30,12 @@ p {
 }
 
 .logo {
+  font-family: 'Podkova', sans-serif;
   text-decoration: none;
 }
 
 .logo-text {
-  font-size: 36px;
+  font-size: 42px;
   color: black;
   /* background: -webkit-linear-gradient(0deg, green, orange); */
   /* -webkit-background-clip: text; */
@@ -51,7 +52,7 @@ color: #D8D8D8FF;
 }
 
 #status {
-  font-size: 24px;
+  font-size: 28px;
   margin-bottom: 1rem;
 }
 
@@ -65,10 +66,19 @@ color: #D8D8D8FF;
   /* will-change: opacity; */
 }
 
+.book:hover {
+  background-color: #fff6bf;
+}
+
 .book-url {
-  color: green;
+  color: black;
   text-decoration: none;
 }
+
+.book-url:hover {
+  background-color: blue;
+}
+
 
 .color-ink {
   color: #3393FF;
