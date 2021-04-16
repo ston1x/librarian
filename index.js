@@ -85,21 +85,23 @@ function readFile(file) {
 
 function renderBook (books, title, amountOfNotes, bookIndex) {
   // create a new div element
-  var newDiv = document.createElement("a");
-  newDiv.id = `book-${bookIndex}`
+  var newDiv = document.createElement("div");
+  var anchor = document.createElement("a");
+  anchor.id = `book-${bookIndex}`
   // and give it some content
   var paragraph = document.createElement("p");
   var newContent = document.createTextNode(`${bookEmojis[bookIndex]} ${title}: ${amountOfNotes}`);
   // add the text node to the newly created div
   paragraph.appendChild(newContent);
-  newDiv.appendChild(paragraph);
+  anchor.appendChild(paragraph);
+  newDiv.appendChild(anchor);
   newDiv.classList.add("book");
   // add the newly created element and its content into the DOM
   var booksList = document.getElementById("books-list");
   var firstChild = booksList.firstChild;
 
   var contents = generateMarkdown(title, books);
-  download(newDiv, `${bookIndex}.md`, contents);
+  download(anchor, `${bookIndex}.md`, contents);
   booksList.insertBefore(newDiv, firstChild);
 }
 
