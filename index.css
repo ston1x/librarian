@@ -4,6 +4,15 @@ body {
   text-align: center;
 }
 
+.header {
+  display: flex;
+  overflow-x: auto;
+  white-space: nowrap;
+  align-items: center;
+  justify-content: space-between;
+  flex-grow: 1;
+}
+
 h2,h3,h4,h5,h6 {
   font-weight: 700;
 }
@@ -14,6 +23,30 @@ h1 {
 
 p {
   font-size: 18px;
+}
+
+button {
+  display: inline-flex;
+  margin: 4px;
+  padding: 0 16px;
+  height: 40px;
+  border-radius: 8px;
+  background: white;
+  color: black;
+  font-weight: 700;
+  font-size: 18px;
+  font-family: "Montserrat", "Roboto", sans-serif;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  outline: 0;
+  border: 0;
+  /* border: 3px solid; */
+}
+
+button:active {
+  background: #FFFDE7;
 }
 
 #drop-area {
@@ -90,4 +123,10 @@ color: #D8D8D8FF;
 
 .text-center {
   text-align: center;
+}
+
+.flex {
+  display: flex;
+  flex-grow: 1;
+  align-items: center;
 }
