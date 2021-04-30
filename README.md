@@ -1,16 +1,12 @@
 # 📚 Librarian
-A simple user-friendly organizer of Kindle's "My Clippings.txt" by [Nicolai Stoianov](https://github.com/ston1x)
+A simple user-friendly organizer of Kindle's "My Clippings.txt"
 
 ![screenshot](https://github.com/ston1x/librarian/blob/main/images/screenshot.png?raw=true)
 
 ## Features
 📚 Groups all clippings by books  
 
-8️⃣ Counts how many clippings you have per book  
-
 📃 Lets you download a markdown version of your clippings per book  
-
-☀️ It's free and open-source!
 
 ## Usage
 0. Connect your Kindle via USB and go to the `documents/` directory
