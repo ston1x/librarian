@@ -1,5 +1,5 @@
 const dropArea = document.getElementById('drop-area');
-const bookEmojis = ['📕', '📔', '📘', '📗', '📙', '📒', '📓'];
+const bookEmojis = ['📕', '📙', '📒', '📗', '📘', '📓', '📔'];
 
 function download(element, filename, contents) {
   element.setAttribute('href', 'data:text/markdown;charset=utf-8,' + encodeURIComponent(contents));
