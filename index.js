@@ -72,7 +72,7 @@ function readFile(file) {
 
       renderBook(grouped, title, amountOfNotes, bookIndex);
 
-      (bookIndex > bookEmojis.length) ? bookIndex = 0 : bookIndex++;
+      (bookIndex >= bookEmojis.length - 1) ? bookIndex = 0 : bookIndex++;
     }
 
     // TODO: Handle errors
