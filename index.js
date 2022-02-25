@@ -39,7 +39,7 @@ function validateType(fileList) {
 function readFile(file) {
   const reader = new FileReader();
   const separator = '==========';
-  const timestampRegex = /Added on|Добавлено\:*/;
+  const timestampRegex = /Added on|Добавлено|Añadido el\:*/;
 
   reader.onload = function(event) {
     var contents = event.target.result;
