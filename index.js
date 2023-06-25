@@ -36,53 +36,66 @@ function validateType(fileList) {
   }
 };
 
-function readFile(file) {
-  const reader = new FileReader();
+// Utility functions
+const cleanUp = (str) => str.replace(/[\n\r]+/g, '');
+const getAttribute = (attributes, index, regex = null) => {
+  let attr = cleanUp(attributes[index]);
+  return regex ? attr.split(regex).filter(Boolean)[1] : attr;
+};
+
+// Core functionality
+function parseClippings(contents) {
   const separator = '==========';
   const timestampRegex = /Added on|Добавлено|Añadido el\:*/;
 
-  // TODO: Handle other languages? Check how Kindle behaves when other system languages are used
-  // TODO: Generate CSV and/or Markdown
+  const clippings = contents.split(separator);
+
+  return clippings.map(clipping => {
+    const attributes = clipping.split("\n");
+    // Each clipping contains unnecessary auto-generated chunks of symbols like "\r" which we don't need and are not treating them as meaningful
+    const cleanedUpAttributes = attributes.filter(attr => attr !== "\r" && attr !== '');
+
+    // Skipping current clipping if no text is contained within a clipping, only datetime and book title
+    if (cleanedUpAttributes.length < 3) return null;
+
+    const title = getAttribute(cleanedUpAttributes, 0);
+    const timestamp = getAttribute(cleanedUpAttributes, 1, timestampRegex);
+    const text = getAttribute(cleanedUpAttributes, 2);
+
+    return {title: title, text: text, timestamp: timestamp};
+  }).filter(value => value);
+}
+
+function readFile(file) {
+  const reader = new FileReader();
+
   reader.onload = function(event) {
     try {
-      console.log("Reading the file")
-      var contents = event.target.result;
+      console.log("Reading the file");
+      const contents = event.target.result;
 
-      console.log("Reading notes by the separator")
-      const notes = contents.split(separator);
+      console.log("Parsing clippings");
+      const parsed = parseClippings(contents);
 
-      console.log("Mapping notes")
-      const parsed = notes.map(note => {
-        var attributes = note.split("\n");
-        var cleanedUpAttributes = attributes.filter(attr => attr !== "\r" && attr !== '');
-
-        if (cleanedUpAttributes.length < 3) return null;
-
-        var title = cleanedUpAttributes[0].replace(/[\n\r]+/g, '').replace(/^\uFEFF/gm, '').replace(/^\u00BB\u00BF/gm,'');
-        var text = cleanedUpAttributes[2].replace(/[\n\r]+/g, '');
-        var timestamp = cleanedUpAttributes[1].replace(/[\n\r]+/g, '').split(timestampRegex).filter(Boolean)[1];
-
-        return {title: title, text: text, timestamp: timestamp};
-      }).filter(value => value);
-
-      console.log("Grouping notes by titles")
+      console.log("Grouping clippings by titles");
       const groupByTitles = groupBy('title');
       const grouped = groupByTitles(parsed);
 
       booksTitles = Object.keys(grouped);
 
       document.getElementById('separator').innerHTML = '. . .';
-      document.getElementById('status').innerHTML = '✨ Success! Found some notes:';
+      document.getElementById('status').innerHTML = '✨ Success! Found some clippings:';
 
-      console.log("Rendering book titles")
+      console.log("Rendering book titles");
       let bookIndex = 0;
       for (const title in grouped) {
-        amountOfNotes = grouped[title].length;
+        amountOfClippings = grouped[title].length;
 
-        renderBook(grouped, title, amountOfNotes, bookIndex);
+        renderBook(grouped, title, amountOfClippings, bookIndex);
 
         (bookIndex >= bookEmojis.length - 1) ? bookIndex = 0 : bookIndex++;
       }
+      console.log("Done!")
 
     } catch(error) {
       console.error(error);  // this will log the error message to the console
@@ -92,14 +105,14 @@ function readFile(file) {
   reader.readAsText(file);
 }
 
-function renderBook (books, title, amountOfNotes, bookIndex) {
+function renderBook (books, title, amountOfClippings, bookIndex) {
   // create a new div element
   var newDiv = document.createElement("div");
   var anchor = document.createElement("a");
   anchor.id = `book-${bookIndex}`
   // and give it some content
   var paragraph = document.createElement("p");
-  var newContent = document.createTextNode(`${bookEmojis[bookIndex]} ${title}: ${amountOfNotes}`);
+  var newContent = document.createTextNode(`${bookEmojis[bookIndex]} ${title}: ${amountOfClippings}`);
   // add the text node to the newly created div
   paragraph.appendChild(newContent);
   anchor.appendChild(paragraph);
@@ -110,15 +123,17 @@ function renderBook (books, title, amountOfNotes, bookIndex) {
   var firstChild = booksList.firstChild;
 
   var contents = generateMarkdown(title, books);
-  download(anchor, `${bookIndex}.md`, contents);
+
+  var filename = title.replace(/\"/gi,"'").replace(/[\\\/"\*\:\?<>|]/gi, '');
+  download(anchor, `${filename}.md`, contents);
   booksList.insertBefore(newDiv, firstChild);
 }
 
 function generateMarkdown(title, books) {
   currentBook = books[title];
   var str = ''
-  for (note of currentBook) {
-    str += `> ${note['text']}\n\n${note['timestamp']}\n\n`;
+  for (clipping of currentBook) {
+    str += `> ${clipping['text']}\n\n${clipping['timestamp']}\n\n`;
   }
   return str;
 }
