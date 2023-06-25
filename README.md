@@ -4,9 +4,9 @@ A simple user-friendly organizer of Kindle's "My Clippings.txt"
 ![screenshot](https://github.com/ston1x/librarian/blob/main/images/screenshot.png?raw=true)
 
 ## Features
-📚 Groups all clippings by books  
+📚 Groups all clippings by books
 
-📃 Lets you download a markdown version of your clippings per book  
+📃 Lets you download a markdown version of your clippings per book (works especially great with Notion – use Librarian to download your clippings for one of the books, then go to Notion, create a new page, click "Import", select "Text & Markdown", then choose the file you've downloaded)
 
 ## Usage
 0. Connect your Kindle via USB and go to the `documents/` directory
