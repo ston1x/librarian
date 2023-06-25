@@ -41,43 +41,52 @@ function readFile(file) {
   const separator = '==========';
   const timestampRegex = /Added on|Добавлено|Añadido el\:*/;
 
+  // TODO: Handle other languages? Check how Kindle behaves when other system languages are used
+  // TODO: Generate CSV and/or Markdown
   reader.onload = function(event) {
-    var contents = event.target.result;
-    const notes = contents.split(separator);
+    try {
+      console.log("Reading the file")
+      var contents = event.target.result;
 
-    const parsed = notes.map(note => {
-      var attributes = note.split("\n");
-      var cleanedUpAttributes = attributes.filter(attr => attr !== "\r" && attr !== '');
+      console.log("Reading notes by the separator")
+      const notes = contents.split(separator);
 
-      if (cleanedUpAttributes.length < 3) return null;
+      console.log("Mapping notes")
+      const parsed = notes.map(note => {
+        var attributes = note.split("\n");
+        var cleanedUpAttributes = attributes.filter(attr => attr !== "\r" && attr !== '');
 
-      var title = cleanedUpAttributes[0].replace(/[\n\r]+/g, '').replace(/^\uFEFF/gm, '').replace(/^\u00BB\u00BF/gm,'');
-      var text = cleanedUpAttributes[2].replace(/[\n\r]+/g, '');
-      var timestamp = cleanedUpAttributes[1].replace(/[\n\r]+/g, '').split(timestampRegex).filter(Boolean)[1];
+        if (cleanedUpAttributes.length < 3) return null;
 
-      return {title: title, text: text, timestamp: timestamp};
-    }).filter(value => value);
+        var title = cleanedUpAttributes[0].replace(/[\n\r]+/g, '').replace(/^\uFEFF/gm, '').replace(/^\u00BB\u00BF/gm,'');
+        var text = cleanedUpAttributes[2].replace(/[\n\r]+/g, '');
+        var timestamp = cleanedUpAttributes[1].replace(/[\n\r]+/g, '').split(timestampRegex).filter(Boolean)[1];
 
-    const groupByTitles = groupBy('title');
-    const grouped = groupByTitles(parsed);
+        return {title: title, text: text, timestamp: timestamp};
+      }).filter(value => value);
 
-    booksTitles = Object.keys(grouped);
+      console.log("Grouping notes by titles")
+      const groupByTitles = groupBy('title');
+      const grouped = groupByTitles(parsed);
 
-    document.getElementById('separator').innerHTML = '. . .';
-    document.getElementById('status').innerHTML = '✨ Success! Found some notes:';
+      booksTitles = Object.keys(grouped);
 
-    let bookIndex = 0;
-    for (const title in grouped) {
-      amountOfNotes = grouped[title].length;
+      document.getElementById('separator').innerHTML = '. . .';
+      document.getElementById('status').innerHTML = '✨ Success! Found some notes:';
 
-      renderBook(grouped, title, amountOfNotes, bookIndex);
+      console.log("Rendering book titles")
+      let bookIndex = 0;
+      for (const title in grouped) {
+        amountOfNotes = grouped[title].length;
 
-      (bookIndex >= bookEmojis.length - 1) ? bookIndex = 0 : bookIndex++;
+        renderBook(grouped, title, amountOfNotes, bookIndex);
+
+        (bookIndex >= bookEmojis.length - 1) ? bookIndex = 0 : bookIndex++;
+      }
+
+    } catch(error) {
+      console.error(error);  // this will log the error message to the console
     }
-
-    // TODO: Handle errors
-    // TODO: Handle other languages? Check how Kindle behaves when other system languages are used
-    // TODO: Generate CSV and/or Markdown
   };
 
   reader.readAsText(file);
